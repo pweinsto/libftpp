@@ -1,5 +1,6 @@
 *.gch
 *.a
+*.out
 
 main_client.cpp
 main_data_buffer.cpp
