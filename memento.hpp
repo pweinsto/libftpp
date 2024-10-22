@@ -11,14 +11,14 @@ public:
 	public:
 
 		template<typename T>
-		Snapshot &operator<<(const T &value)
+		Snapshot &operator<<(const T& value)
 		{
 			m_buffer << value;
 			return *this;
 		}
 
 		template<typename T>
-		Snapshot &operator>>(T &value)
+		Snapshot &operator>>(T& value)
 		{
 			m_buffer >> value;
 			return *this;
