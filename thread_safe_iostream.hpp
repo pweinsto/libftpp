@@ -60,5 +60,6 @@ private:
 std::mutex ThreadSafeIOStream::m_mutex;
 
 thread_local ThreadSafeIOStream threadSafeCout;
+thread_local ThreadSafeIOStream threadSafeCin;
 
 # endif
