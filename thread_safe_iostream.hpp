@@ -18,14 +18,8 @@ public:
 
 	ThreadSafeIOStream& operator<<(std::ostream& (*manip)(std::ostream&))
 	{
-		if (manip == static_cast<std::ostream& (*)(std::ostream&)>(std::endl))
-		{
-			flushWithPrefix();
-		}
-		else
-		{
-			m_buffer << manip;
-		}
+		m_buffer << manip;
+		flushWithPrefix();
 		return *this;
 	}
 
@@ -46,7 +40,7 @@ private:
 	void flushWithPrefix()
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
-		std::cout << m_prefix << m_buffer.str() << std::endl;
+		std::cout << m_prefix << m_buffer.str() /*<< std::endl*/;
 		m_buffer.str("");
 		m_buffer.clear();
 	}
@@ -57,9 +51,7 @@ private:
 
 };
 
-std::mutex ThreadSafeIOStream::m_mutex;
-
-thread_local ThreadSafeIOStream threadSafeCout;
-thread_local ThreadSafeIOStream threadSafeCin;
+extern thread_local ThreadSafeIOStream threadSafeCout;
+extern thread_local ThreadSafeIOStream threadSafeCin;
 
 # endif
