@@ -1,18 +1,18 @@
 #include "thread.hpp"
 
 Thread::Thread(const std::string& name, std::function<void()> functToExecute)
-	: threadName(name), functToExecute(std::move(functToExecute)), isRunning(false) {}
+	: m_threadName(name), m_functToExecute(std::move(functToExecute)), m_isRunning(false) {}
 
 void Thread::start()
 {
-	if (!isRunning)
+	if (!m_isRunning)
 	{
-		isRunning = true;
-		internalThread = std::thread([this]()
+		m_isRunning = true;
+		m_internalThread = std::thread([this]()
 		{
-			threadSafeCout.setPrefix(threadName);
+			threadSafeCout.setPrefix(m_threadName);
 			threadSafeCout << " Starting execution" << std::endl;
-			functToExecute();
+			m_functToExecute();
 			threadSafeCout << " Finished execution" << std::endl;
 		});
 	}
@@ -20,10 +20,10 @@ void Thread::start()
 
 void Thread::stop()
 {
-	if (isRunning && internalThread.joinable())
+	if (m_isRunning && m_internalThread.joinable())
 	{
-		internalThread.join();
-		isRunning = false;
-		std::cout << threadName << " Stopped" << std::endl;
+		m_internalThread.join();
+		m_isRunning = false;
+		std::cout << m_threadName << " Stopped" << std::endl;
 	}
 }

@@ -16,10 +16,10 @@ public:
 	void stop();
 
 private:
-	std::string threadName;
-	std::function<void()> functToExecute;
-	std::thread internalThread;
-	std::atomic<bool> isRunning;
+	std::string m_threadName;
+	std::function<void()> m_functToExecute;
+	std::thread m_internalThread;
+	std::atomic<bool> m_isRunning;
 };
 
 # endif
