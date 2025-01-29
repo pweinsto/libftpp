@@ -1,40 +1,36 @@
-NAME		=	libftpp.a
+NAME        := libftpp.a
+CXX         := c++
+CXXFLAGS    := -Wall -Wextra -Werror -std=c++17
+AR          := ar rcs
+RM          := rm -f
 
-SRCS		=	
+INCLUDE_DIR := include
+SRC_DIR     := src
+OBJ_DIR     := obj
 
-OBJS		=	$(SRCS:.cpp=.o)
+SRCS := $(shell find $(SRC_DIR) -name '*.cpp')
 
-BSRCS		=		
+# Convert .cpp to .o by replacing src/ with obj/ and .cpp with .o
+OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-BOBJS		=	$(BSRCS:.cpp=.o)
+all: $(NAME)
 
-CPPC		=	c++
+$(NAME): $(OBJS)
+	@echo "Archiving library: $@"
+	$(AR) $@ $(OBJS)
 
-CPPFLAGS	=	-Wall -Wextra -Werror -std=c++11
-
-AR			=	ar rc
-
-RAN			=	ranlib
-
-RM			=	rm -f
-
-.cpp.o:
-			$(CPPC) $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
-
-$(NAME):	$(OBJS)
-			$(AR) $(NAME) $(OBJS)
-			$(RAN) $(NAME)
-
-bonus:		$(NAME) $(BOBJS)
-			$(AR) $(NAME) $(BOBJS)
-			$(RAN) $(NAME)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -c $< -o $@
 
 clean:
-			$(RM) $(OBJS) $(BOBJS)
+	@echo "Cleaning object files..."
+	$(RM) -r $(OBJ_DIR)
 
-fclean:		clean
-			$(RM) $(NAME)
+fclean: clean
+	@echo "Removing library..."
+	$(RM) $(NAME)
 
-all:		$(NAME)
+re: fclean all
 
-re:			fclean all
+.PHONY: all clean fclean re
