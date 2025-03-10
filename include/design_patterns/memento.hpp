@@ -5,8 +5,9 @@
 # include <iostream>
 # include <vector>
 # include <cstdint>
+# include "../data_structures/data_buffer.hpp"
 
-class DataBuffer {
+/*class DataBuffer {
 public:
 	DataBuffer();
 	~DataBuffer();
@@ -38,7 +39,7 @@ public:
 
 private:
 	std::vector<uint8_t> m_buffer;
-};
+};*/
 
 class Memento
 {
