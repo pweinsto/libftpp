@@ -1,4 +1,0 @@
-#include "../../include/network/message.hpp"
-
-// Currently empty because everything is implemented inline.
-void messageDummySymbol() {}

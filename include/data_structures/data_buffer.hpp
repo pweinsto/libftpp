@@ -6,7 +6,8 @@
 # include <vector>
 # include <cstdint>
 
-class DataBuffer {
+class DataBuffer
+{
 public:
 	DataBuffer();
 	~DataBuffer();

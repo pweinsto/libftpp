@@ -32,13 +32,3 @@ Memento::Snapshot::~Snapshot()
 {
 
 }
-
-DataBuffer::DataBuffer()
-{
-
-}
-
-DataBuffer::~DataBuffer()
-{
-
-}

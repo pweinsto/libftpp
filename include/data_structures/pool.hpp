@@ -8,9 +8,7 @@
 template<typename TType>
 class Pool
 {
-
 public:
-
 	Pool()
 	{
 		std::cout << "Pool constructor" << std::endl;
