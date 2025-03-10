@@ -1,0 +1,78 @@
+#ifndef MESSAGE_HPP
+#define MESSAGE_HPP
+
+#include <vector>
+#include <cstdint>
+#include <cstring>
+#include <stdexcept>
+#include <type_traits>
+
+class Message
+{
+public:
+    using Type = int;
+
+    explicit Message(Type t = 0)
+        : m_type(t)
+        , m_readPos(0)
+    {}
+
+    /**
+     * @return The type of this message.
+     */
+    Type type() const { return m_type; }
+
+    /**
+     * @brief Write/serialize data into the message.
+     * 
+     * Non-const function because it appends to m_body.
+     */
+    template <typename T>
+    Message& operator<<(const T& data)
+    {
+        static_assert(std::is_trivially_copyable<T>::value,
+                      "Message<< can only be used with trivially copyable types.");
+
+        // Append space at the end of m_body
+        size_t oldSize = m_body.size();
+        m_body.resize(oldSize + sizeof(T));
+
+        // Copy from 'data' into the newly allocated space
+        std::memcpy(m_body.data() + oldSize, &data, sizeof(T));
+        return *this;
+    }
+
+    /**
+     * @brief Read/deserialize data from the message (const-correct).
+     * 
+     * Marked 'const' so we can call it on a const Message&,
+     * but uses 'mutable' m_readPos to advance the read pointer.
+     */
+    template <typename T>
+    const Message& operator>>(T& data) const
+    {
+        static_assert(std::is_trivially_copyable<T>::value,
+                      "Message>> can only be used with trivially copyable types.");
+
+        if (m_readPos + sizeof(T) > m_body.size()) {
+            throw std::runtime_error("Not enough data in message to deserialize.");
+        }
+
+        // Copy bytes from m_body into 'data'
+        std::memcpy(&data, m_body.data() + m_readPos, sizeof(T));
+
+        // Advance the read pointer
+        m_readPos += sizeof(T);
+
+        return *this; 
+    }
+
+private:
+    Type m_type;                   // e.g. 1, 2, ...
+    std::vector<char> m_body;      // Holds serialized data
+
+    // 'mutable' allows modification from within a const member function
+    mutable size_t m_readPos;
+};
+
+#endif // MESSAGE_HPP

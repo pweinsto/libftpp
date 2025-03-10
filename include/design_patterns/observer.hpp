@@ -2,7 +2,7 @@
 # define OBSERVER_HPP
 
 # include <functional>
-# include <map>
+# include <unordered_map>
 # include <vector>
 
 template<typename TEvent>
@@ -16,6 +16,7 @@ public:
 
 	void notify(const TEvent& event)
 	{
+		
 		if (subscribers.find(event) != subscribers.end())
 		{
 			for (const std::function<void()>& lambda : subscribers[event])
@@ -26,7 +27,7 @@ public:
 	}
 
 private:
-	std::map<TEvent, std::vector<std::function<void()>>> subscribers;
+	std::unordered_map<TEvent, std::vector<std::function<void()>>> subscribers;
 };
 
-# endif
+# endif // OBSERVER_HPP

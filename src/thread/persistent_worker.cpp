@@ -1,4 +1,4 @@
-#include "persistent_worker.hpp"
+#include "../../include/thread/persistent_worker.hpp"
 
 PersistentWorker::PersistentWorker() : m_running(true)
 {

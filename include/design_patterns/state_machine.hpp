@@ -65,4 +65,4 @@ private:
 	std::map<std::pair<TState, TState>, std::function<void()>> m_transitions;
 };
 
-# endif
+# endif // STATE_MACHINE_HPP

@@ -1,9 +1,9 @@
 #ifndef THREAD_SAFE_QUEUE_HPP
 # define THREAD_SAFE_QUEUE_HPP
 
-#include <deque>
-#include <mutex>
-#include <stdexcept>
+# include <deque>
+# include <mutex>
+# include <stdexcept>
 
 template<typename TType>
 class ThreadSafeQueue
@@ -49,4 +49,4 @@ private:
 	std::mutex m_mutex;
 };
 
-# endif
+# endif // THREAD_SAFE_QUEUE

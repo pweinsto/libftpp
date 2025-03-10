@@ -1,0 +1,100 @@
+#include "../../include/network/server.hpp"
+#include <iostream>
+
+void Server::start(const size_t& p_port)
+{
+    // Stub: pretend the server is running
+    m_running = true;
+    std::cout << "[Server] Started on port " << p_port << std::endl;
+
+    // For simplicity, let's assume a single connected client with ID=1:
+    //m_clients.push_back(1);
+    //std::cout << "[Server] Accepted client with ID=1\n";
+}
+
+void Server::defineAction(const Message::Type& messageType,
+                          const std::function<void(long long&, const Message&)>& action)
+{
+    m_actions[messageType] = action;
+}
+
+void Server::sendTo(const Message& message, long long clientID)
+{
+    // Stub: Normally, you'd serialize and send over a socket to that client.
+    // We'll just store it in m_outgoing to simulate that "the client will eventually get it".
+    m_outgoing.emplace_back(clientID, message);
+    std::cout << "[Server] Queued message of type " << message.type()
+              << " to client " << clientID << std::endl;
+}
+
+void Server::sendToArray(const Message& message, std::vector<long long> clientIDs)
+{
+    for (auto cid : clientIDs) {
+        sendTo(message, cid);
+    }
+}
+
+void Server::sendToAll(const Message& message)
+{
+    for (auto cid : m_clients) {
+        sendTo(message, cid);
+    }
+}
+
+void Server::update()
+{
+    // ----------------------------------------------------------------------------
+    //  STUB MECHANISM:
+    //  In a real server, you would:
+    //    1. Accept new client connections (if any).
+    //    2. Read incoming data from each client, parse into Message objects,
+    //       and store them in m_receivedMessages.
+    //    3. For each received message, call the user-defined action from m_actions.
+    //    4. For each "sendTo" call, actually deliver the data to the client.
+    //
+    //  Here, we'll just simulate that the single client (ID=1) sends exactly
+    //  two messages (type=1 and type=2) once, then never again.
+    // ----------------------------------------------------------------------------
+
+    static bool simulatedClientHasSent = false;
+    if (!simulatedClientHasSent && !m_clients.empty()) {
+        long long clientID = m_clients[0]; // assume ID=1
+        {
+            // Simulate the client sending a message of type=1 with integer=42
+            Message msg(1);
+            msg << 42;
+            m_receivedMessages.push_back({clientID, msg});
+        }
+        {
+            // Simulate the client sending a message of type=2 with "Hello"
+            Message msg(2);
+            std::string text = "Hello";
+            // The example code expects reading a size_t (or int) for length,
+            // then reading characters individually:
+            msg << (int)text.size();
+            for (char c : text) {
+                msg << c;
+            }
+            m_receivedMessages.push_back({clientID, msg});
+        }
+        simulatedClientHasSent = true;
+    }
+
+    // Process all newly received messages
+    for (auto &entry : m_receivedMessages) {
+        long long clientID = entry.first;
+        Message &msg = entry.second;
+
+        auto it = m_actions.find(msg.type());
+        if (it != m_actions.end()) {
+            // Call the user-defined action
+            it->second(clientID, msg);
+        }
+    }
+    m_receivedMessages.clear();
+
+    // The "m_outgoing" messages are what the server wants to send to the client.
+    // In a real implementation, we’d actually send them over the network here.
+    // We'll just clear them in this stub.
+    m_outgoing.clear();
+}

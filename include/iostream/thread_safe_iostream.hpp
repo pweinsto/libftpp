@@ -50,4 +50,4 @@ private:
 extern thread_local ThreadSafeIOStream threadSafeCout;
 extern thread_local ThreadSafeIOStream threadSafeCin;
 
-# endif
+# endif // THREAD_SAFE_IOSTREAM_HPP

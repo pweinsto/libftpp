@@ -1,4 +1,4 @@
-#include "worker_pool.hpp"
+#include "../../include/thread/worker_pool.hpp"
 
 WorkerPool::WorkerPool(size_t numThreads) : m_stopFlag(false)
 {

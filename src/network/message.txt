@@ -1,0 +1,3 @@
+#include "../../include/network/message.hpp"
+
+// No implementation needed, since all methods are inline in the header

@@ -1,0 +1,60 @@
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
+
+#include <string>
+#include <functional>
+#include <unordered_map>
+#include <vector>
+#include "message.hpp"
+
+/**
+ * @brief A stub Client class that pretends to connect/disconnect, send, receive messages, 
+ * and invoke user actions for each received message.
+ */
+class Client
+{
+public:
+    Client() = default;
+    ~Client() { disconnect(); }
+
+    /**
+     * @brief Connect to a server at (address, port).
+     */
+    void connect(const std::string& address, const size_t& port);
+
+    /**
+     * @brief Disconnect from the server.
+     */
+    void disconnect();
+
+    /**
+     * @brief Register a callback/action for a particular message type.
+     */
+    void defineAction(const Message::Type& messageType,
+                      const std::function<void(const Message& msg)>& action);
+
+    /**
+     * @brief Send a message to the server.
+     */
+    void send(const Message& message);
+
+    /**
+     * @brief Process all messages that have arrived from the server since the last update.
+     */
+    void update();
+
+private:
+    bool m_connected = false;
+
+    // Maps message types to user-defined callback functions.
+    std::unordered_map<Message::Type, std::function<void(const Message&)>> m_actions;
+
+    // For demonstration, we store "sent" messages locally and pretend the server will respond.
+    std::vector<Message> m_toSend;
+
+    // For demonstration, we store "received" messages locally until `update()` is called.
+    std::vector<Message> m_received;
+};
+
+#endif

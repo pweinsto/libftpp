@@ -13,16 +13,19 @@
 class WorkerPool
 {
 public:
+	class IJobs
+	{
+		virtual ~IJobs() = default;
+		virtual void execute() = 0;
+	};
+	
 	WorkerPool(size_t numThreads);
 
 	~WorkerPool();
 
 	void addJob(const std::function<void()>& jobToExecute);
 
-	class IJob {
-		virtual ~IJob() = default;
-		virtual void execute() = 0;
-	};
+	
 
 private:
 	void workerThread();
@@ -34,4 +37,4 @@ private:
 	std::atomic<bool> m_stopFlag;
 };
 
-# endif
+# endif // WORKER_POOL_HPP

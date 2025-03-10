@@ -1,0 +1,42 @@
+#ifndef SERVER_HPP
+#define SERVER_HPP
+
+#include <vector>
+#include <functional>
+#include "message.hpp"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+
+class Server {
+public:
+    Server();
+    ~Server();
+
+    // Start the server at the specified port
+    void start(const size_t& port);
+
+    // Define an action for a specific message type
+    void defineAction(const Message::Type& messageType, const std::function<void(long long&, const Message&)>& action);
+
+    // Send a message to a specific client
+    void sendTo(const Message& message, long long clientID);
+
+    // Send a message to a group of clients
+    void sendToArray(const Message& message, std::vector<long long> clientIDs);
+
+    // Send a message to all connected clients
+    void sendToAll(const Message& message);
+
+    // Process all received messages
+    void update();
+
+private:
+    int server_fd_;  // Server socket file descriptor
+    sockaddr_in server_addr_;  // Server address
+    std::vector<int> client_fds_;  // List of connected clients
+    std::vector<std::function<void(long long&, const Message&)>> actions_;  // Actions for each message type
+    bool running_;
+};
+
+#endif // SERVER_HPP
