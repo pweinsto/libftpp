@@ -61,7 +61,7 @@ public:
 private:
 	std::set<TState> m_states;
 	std::optional<TState> m_currentState;
-	std::map<TState, std::function<void()>> m_actions;
+	std::unordered_map<TState, std::function<void()>> m_actions;
 	std::map<std::pair<TState, TState>, std::function<void()>> m_transitions;
 };
 

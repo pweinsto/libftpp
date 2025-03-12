@@ -4,7 +4,7 @@
 class Random2DCoordinateGenerator
 {
 public:
-	explicit Random2DCoordinateGenerator(long long s = 42LL);
+	Random2DCoordinateGenerator(long long s = 42LL);
 
 	long long seed() const;
 

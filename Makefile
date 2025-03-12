@@ -16,8 +16,8 @@ OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "Archiving library: $@"
-	$(AR) $@ $(OBJS)
+	@echo "Archiving library: $(NAME)"
+	$(AR) $(NAME) $(OBJS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
